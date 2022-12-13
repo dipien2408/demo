@@ -41,7 +41,6 @@ const RoomDetails = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [datesReserve, setDatesReserve] = useState(dates);
-
   const { room, loading, error } = useSelector((state) => state.roomDetails);
 
   const { success, error: reviewError } = useSelector(
@@ -102,6 +101,13 @@ const RoomDetails = () => {
     open ? setOpen(false) : setOpen(true);
   };
 
+  const handleChange = (item) => {
+    if(item.selection.endDate.getDate() === item.selection.startDate.getDate()) {
+      alert.error('Cannot choose same date')
+    } else {
+      setDatesReserve([item.selection])
+    }
+  }
   const reviewSubmitHandler = () => {
     const myForm = new FormData();
 
@@ -157,7 +163,9 @@ const RoomDetails = () => {
                 <DateRange
                   minDate={new Date()}
                   ranges={datesReserve}
-                  onChange={item => setDatesReserve([item.selection])}
+                  onChange={item => handleChange(item)}
+                  moveRangeOnFirstSelection={false}
+                  retainEndDateOnFirstSelection={false}
                 />
 
                 <button
